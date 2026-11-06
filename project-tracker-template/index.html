@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Company Sdn Bhd - Equipment Rollout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = { theme: { extend: { fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] } } } };
+    </script>
+    <style>
+        :root { --brand: #15803d; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .clean-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 1rem;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,.04), 0 1px 2px -1px rgba(0,0,0,.04); transition: all .2s ease; }
+        .clean-card:hover { box-shadow: 0 4px 6px -1px rgba(0,0,0,.06), 0 2px 4px -2px rgba(0,0,0,.06); }
+        .brand-text { color: var(--brand); }
+        .brand-bg { background-color: var(--brand); }
+        .nav-item { border-left: 3px solid transparent; }
+        .nav-item.active { background-color: color-mix(in srgb, var(--brand) 8%, white); color: var(--brand);
+            font-weight: 700; border-left-color: var(--brand); }
+        .badge { display: inline-flex; align-items: center; gap: .3rem; padding: .1rem .55rem; border-radius: 9999px;
+            font-size: 10px; font-weight: 700; font-family: 'JetBrains Mono', monospace; border: 1px solid; white-space: nowrap; }
+        @media print {
+            .no-print, #sidebar, #sidebar-backdrop { display: none !important; }
+            .main-wrap { margin-left: 0 !important; }
+            .page-content { display: block !important; break-after: page; }
+            .clean-card { box-shadow: none !important; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex bg-slate-50 antialiased relative">
+
+<div id="sidebar-backdrop" onclick="closeSidebar()" class="fixed inset-0 bg-slate-900/50 z-40 hidden md:hidden"></div>
+
+<!-- SIDEBAR -->
+<aside id="sidebar" class="-translate-x-full md:translate-x-0 w-64 bg-white border-r border-slate-200 flex flex-col fixed inset-y-0 left-0 z-50 shadow-lg md:shadow-none transition-transform duration-300 no-print">
+    <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+        <div class="flex items-center gap-3 min-w-0">
+            <div class="w-10 h-10 shrink-0 rounded-xl brand-bg flex items-center justify-center text-white text-lg shadow-md"><i id="brand-icon"></i></div>
+            <div class="min-w-0">
+                <h1 id="brand-org" class="text-sm font-bold text-slate-900 leading-tight truncate"></h1>
+                <p id="brand-subtitle" class="text-[11px] brand-text font-semibold tracking-wide uppercase truncate"></p>
+            </div>
+        </div>
+        <button onclick="closeSidebar()" class="md:hidden w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center" aria-label="Close sidebar"><i class="fa-solid fa-xmark text-sm"></i></button>
+    </div>
+
+    <nav id="nav" class="p-3 space-y-1.5 flex-1 overflow-y-auto custom-scrollbar"></nav>
+
+    <div class="p-4 border-t border-slate-100 bg-slate-50/70 space-y-2.5 text-[11px]">
+        <div class="flex items-center justify-between text-slate-500">
+            <span>Data as of:</span><span id="sb-asof" class="font-bold text-slate-700 font-mono"></span>
+        </div>
+        <div id="sb-vendor-wrap" class="flex flex-col gap-0.5 text-slate-500">
+            <span>Vendor Partner:</span><span id="sb-vendor" class="font-bold text-slate-800 font-mono leading-tight"></span>
+        </div>
+        <div class="pt-2 border-t border-slate-200 flex items-center gap-2">
+            <button onclick="exportToCSV()" class="flex-1 py-1.5 px-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg font-semibold flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-file-csv brand-text"></i><span>Export</span></button>
+            <button onclick="window.print()" class="flex-1 py-1.5 px-2 bg-slate-900 hover:bg-slate-800 text-white rounded-lg font-semibold flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-print"></i><span>Print</span></button>
+        </div>
+    </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main-wrap flex-1 flex flex-col ml-0 md:ml-64 min-h-screen min-w-0">
+    <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+            <button onclick="openSidebar()" class="md:hidden w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700 no-print" aria-label="Open menu"><i class="fa-solid fa-bars text-sm"></i></button>
+            <div class="min-w-0">
+                <div id="hdr-project" class="text-[11px] font-semibold brand-text uppercase tracking-wider font-mono truncate"></div>
+                <h2 id="page-title" class="text-sm sm:text-base font-bold text-slate-900 leading-tight"></h2>
+            </div>
+        </div>
+        <div class="flex items-center gap-3 text-xs shrink-0">
+            <div class="flex items-center gap-2 bg-slate-100 px-2.5 py-1.5 rounded-lg border border-slate-200 font-mono">
+                <span class="inline-block w-2 h-2 rounded-full brand-bg animate-pulse"></span>
+                <span class="text-slate-600">Progress: <strong id="hdr-pct" class="brand-text"></strong></span>
+            </div>
+            <div id="hdr-asof" class="text-slate-400 font-mono hidden lg:block text-[11px]"></div>
+        </div>
+    </header>
+
+    <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-6xl w-full mx-auto">
+
+        <!-- OVERVIEW -->
+        <section id="page-overview" class="page-content space-y-6">
+            <div id="ov-kpis" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="clean-card p-6 flex flex-col">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700"><i class="fa-solid fa-chart-pie brand-text mr-1.5"></i>Overall Status</h3>
+                    <p id="ov-donut-sub" class="text-xs text-slate-500 mt-0.5"></p>
+                    <div class="relative h-48 my-3"><canvas id="ov-chart-donut"></canvas></div>
+                    <div id="ov-donut-legend" class="grid grid-cols-2 gap-2 text-xs pt-3 border-t border-slate-100 font-medium"></div>
+                </div>
+                <div class="lg:col-span-2 clean-card p-6 flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700"><i class="fa-solid fa-bars-progress text-blue-600 mr-1.5"></i><span class="t-group"></span> Progress</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Completion by <span class="t-group-l"></span></p>
+                        </div>
+                        <button onclick="navigateTo('analytics')" class="text-xs font-semibold text-blue-600 hover:text-blue-800 no-print">Detailed charts <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
+                    </div>
+                    <div id="ov-group-bars" class="space-y-3.5 my-3"></div>
+                    <div id="ov-group-foot" class="pt-3 mt-auto border-t border-slate-100 text-xs text-slate-500"></div>
+                </div>
+            </div>
+            <div id="ov-milestones-card" class="clean-card p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700"><i class="fa-solid fa-diagram-project text-purple-600 mr-1.5"></i>Project Milestones</h3>
+                    <span id="ov-milestones-count" class="text-xs font-mono text-slate-500"></span>
+                </div>
+                <div id="ov-milestones" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+            </div>
+        </section>
+
+        <!-- ANALYTICS -->
+        <section id="page-analytics" class="page-content hidden space-y-6">
+            <div class="clean-card p-6">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700"><i class="fa-solid fa-chart-column brand-text mr-1.5"></i>Deployment by <span class="t-group"></span></h3>
+                <p class="text-xs text-slate-500 mt-0.5 mb-4">Completed vs remaining <span class="t-units-l"></span></p>
+                <div class="relative h-72"><canvas id="an-chart-group"></canvas></div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="clean-card p-6">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700"><i class="fa-solid fa-chart-line text-blue-600 mr-1.5"></i>Deployment Velocity (S-Curve)</h3>
+                    <p class="text-xs text-slate-500 mt-0.5 mb-4">Cumulative planned vs completed</p>
+                    <div class="relative h-64"><canvas id="an-chart-curve"></canvas></div>
+                </div>
+                <div class="clean-card p-6">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700"><i class="fa-solid fa-building text-purple-600 mr-1.5"></i>Distribution by <span class="t-facility"></span> Type</h3>
+                    <p class="text-xs text-slate-500 mt-0.5 mb-4"><span class="t-units"></span> per <span class="t-facility-l"></span> type</p>
+                    <div class="relative h-64"><canvas id="an-chart-facility"></canvas></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SITE DIRECTORY -->
+        <section id="page-sites" class="page-content hidden space-y-4">
+            <div class="clean-card p-4 flex flex-wrap items-center justify-between gap-3 no-print">
+                <div class="flex-1 min-w-[240px] relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="site-search" oninput="filterSites()" placeholder="Search name, no, remarks..." class="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:outline-none focus:bg-white">
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <select id="filter-group" onchange="filterSites()" class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-medium"></select>
+                    <select id="filter-status" onchange="filterSites()" class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-medium"></select>
+                    <button onclick="resetFilters()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-semibold"><i class="fa-solid fa-rotate-left mr-1"></i>Reset</button>
+                </div>
+            </div>
+            <div class="clean-card overflow-hidden">
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-100 text-slate-700 uppercase font-bold border-b border-slate-200 font-mono tracking-wider">
+                            <tr>
+                                <th class="py-3 px-4 w-12 text-center">No</th>
+                                <th class="py-3 px-4 min-w-[260px]"><span class="t-site"></span></th>
+                                <th class="py-3 px-3 text-center t-group"></th>
+                                <th class="py-3 px-3 t-facility"></th>
+                                <th class="py-3 px-3 text-center">Qty</th>
+                                <th class="py-3 px-3">Date</th>
+                                <th class="py-3 px-3 text-center">Status</th>
+                                <th class="py-3 px-4 min-w-[200px]">Remarks / Flags</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sites-body" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
+                    </table>
+                </div>
+                <div class="px-4 py-3 bg-slate-50 border-t border-slate-200 flex flex-wrap gap-2 items-center justify-between text-xs text-slate-600 font-mono">
+                    <div>Showing <span id="f-sites" class="text-slate-900 font-bold"></span> <span class="t-sites-l"></span></div>
+                    <div>Total <span class="t-units"></span>: <span id="f-units" class="brand-text font-bold"></span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCHEDULE -->
+        <section id="page-schedule" class="page-content hidden space-y-4">
+            <div class="clean-card p-6">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                    <div>
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700"><i class="fa-solid fa-calendar-days text-blue-600 mr-1.5"></i>Rollout Timeline <span id="gantt-range" class="normal-case font-semibold text-slate-500"></span></h3>
+                        <p id="gantt-sub" class="text-xs text-slate-500 mt-0.5"></p>
+                    </div>
+                    <div id="gantt-legend" class="flex flex-wrap items-center gap-3 text-xs font-semibold"></div>
+                </div>
+                <div class="overflow-x-auto custom-scrollbar border border-slate-200 rounded-xl bg-white">
+                    <div id="gantt" class="text-xs w-max"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ISSUES -->
+        <section id="page-issues" class="page-content hidden">
+            <div id="issues-grid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+        </section>
+
+        <!-- RACI -->
+        <section id="page-raci" class="page-content hidden space-y-4">
+            <div class="clean-card p-6">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700"><i class="fa-solid fa-users-gear brand-text mr-1.5"></i>Responsibility Matrix</h3>
+                <p id="raci-sub" class="text-xs text-slate-500 mt-0.5 mb-4"></p>
+                <div class="overflow-x-auto custom-scrollbar border border-slate-200 rounded-xl">
+                    <table class="w-full text-left text-xs">
+                        <thead id="raci-head" class="bg-slate-100 text-slate-700 uppercase font-bold border-b border-slate-200 font-mono"></thead>
+                        <tbody id="raci-body" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="mt-auto border-t border-slate-200 bg-white py-3.5 px-6 text-xs text-slate-500 font-mono flex flex-wrap items-center justify-between gap-2">
+        <div id="ft-left"></div>
+        <div id="ft-right"></div>
+    </footer>
+</div>
+
+<script>
+const CONFIG = {"project": {"organization": "Sample Company Sdn Bhd", "name": "Equipment Rollout", "subtitle": "Rollout Tracker", "vendor": "Sample Vendor Sdn Bhd", "icon": "fa-solid fa-id-card-clip", "brand_color": "#15803d", "as_of": "2026-08-15"}, "terms": {"unit": "Device", "units": "Devices", "site": "Site", "sites": "Sites", "group": "Cluster", "groups": "Clusters", "facility": "Facility", "spare": "Spare", "spares": "Spares"}, "statuses": [{"key": "done", "label": "Installed", "color": "#16a34a", "icon": "fa-solid fa-check", "complete": true, "description": "Hardware installed & operational"}, {"key": "upcoming", "label": "Upcoming", "color": "#2563eb", "icon": "fa-solid fa-truck", "description": "Scheduled for rollout"}, {"key": "on_hold", "label": "On Hold", "color": "#d97706", "icon": "fa-solid fa-hand", "action": true, "description": "Waiting on site readiness"}, {"key": "pending", "label": "Pending", "color": "#9333ea", "icon": "fa-solid fa-clock", "action": true, "description": "Awaiting quotation approval or date confirmation"}, {"key": "cancelled", "label": "KIV (Replaced)", "color": "#64748b", "icon": "fa-solid fa-ban", "excluded": true, "description": "Slot reallocated to another site"}], "flags": [{"key": "network", "label": "Network Issue", "color": "#e11d48", "icon": "fa-solid fa-wifi", "any": [{"field": "remarks", "contains": ["network", "unstable", "no signal", "connectivity"]}]}, {"key": "scope", "label": "Scope Change", "color": "#0284c7", "icon": "fa-solid fa-plus", "any": [{"field": "remarks", "contains": ["not in original list", "additional", "new installation"]}]}], "group_names": {"NORTH": "Northern Cluster", "CENTRAL": "Central / HQ", "SOUTH": "Southern Ports", "EAST": "East Coast & Islands"}, "output": {"dir": "/home/user/alam-flora-dashboard/project-tracker-template", "html": "index.html", "json": "project_data.json", "csv_prefix": "Equipment_Rollout"}};
+const DATA = {"metadata": {"source_file": "sample_project.xlsx", "as_of": "2026-08-15", "generated_at": "2026-11-06 05:25", "title": "Time Line for Sample Equipment Installation and Implementation", "initial_date": "Date: 1st June 2026", "revision": "Revise Date: 15th August 2026"}, "kpis": {"total_sites": 15, "active_sites": 14, "total_units": 18, "spares": 2, "total_units_with_spares": 20, "done_units": 13, "done_sites": 9, "done_pct": 72.2, "by_status": {"done": {"sites": 9, "units": 13}, "upcoming": {"sites": 3, "units": 3}, "on_hold": {"sites": 1, "units": 1}, "pending": {"sites": 1, "units": 1}, "cancelled": {"sites": 1, "units": 0}}, "flags": {"network": 2, "scope": 1}}, "groups": {"NORTH": {"sites": 4, "units": 5, "done_units": 4, "done_sites": 3, "region": "Northern", "pct": 80.0}, "CENTRAL": {"sites": 4, "units": 6, "done_units": 6, "done_sites": 4, "region": "Central", "pct": 100.0}, "SOUTH": {"sites": 4, "units": 5, "done_units": 3, "done_sites": 2, "region": "Southern", "pct": 60.0}, "EAST": {"sites": 2, "units": 2, "done_units": 0, "done_sites": 0, "region": "Eastern", "pct": 0.0}}, "facilities": {"Main Office": {"sites": 2, "units": 5}, "Warehouse": {"sites": 1, "units": 1}, "Depot": {"sites": 3, "units": 3}, "Site Office": {"sites": 2, "units": 2}, "Workshop": {"sites": 1, "units": 1}, "Mustering Point": {"sites": 3, "units": 3}, "Office": {"sites": 2, "units": 3}}, "curve": [{"date": "2026-07-20", "planned": 2, "done": 2, "cum_planned": 2, "cum_done": 2}, {"date": "2026-07-21", "planned": 1, "done": 1, "cum_planned": 3, "cum_done": 3}, {"date": "2026-07-22", "planned": 1, "done": 1, "cum_planned": 4, "cum_done": 4}, {"date": "2026-07-27", "planned": 3, "done": 3, "cum_planned": 7, "cum_done": 7}, {"date": "2026-07-28", "planned": 1, "done": 1, "cum_planned": 8, "cum_done": 8}, {"date": "2026-07-29", "planned": 1, "done": 1, "cum_planned": 9, "cum_done": 9}, {"date": "2026-08-03", "planned": 1, "done": 1, "cum_planned": 10, "cum_done": 10}, {"date": "2026-08-05", "planned": 2, "done": 2, "cum_planned": 12, "cum_done": 12}, {"date": "2026-08-06", "planned": 1, "done": 1, "cum_planned": 13, "cum_done": 13}, {"date": "2026-08-18", "planned": 1, "done": 0, "cum_planned": 14, "cum_done": 13}, {"date": "2026-08-20", "planned": 1, "done": 0, "cum_planned": 15, "cum_done": 13}, {"date": "2026-08-24", "planned": 1, "done": 0, "cum_planned": 16, "cum_done": 13}], "milestones": [{"row": 5, "no": "1", "task": "Receive Purchase Order", "quantity": null, "group": null, "region": null, "facility": null, "days": 1, "start_date": "2026-06-01", "start_date_text": null, "end_date": "2026-06-01", "end_date_text": null, "activities": "", "responsibility": "Client", "remarks": "", "status_text": "", "status": "Completed"}, {"row": 6, "no": "2", "task": "Vendor stock order & delivery", "quantity": null, "group": null, "region": null, "facility": null, "days": 18, "start_date": "2026-06-03", "start_date_text": null, "end_date": "2026-06-20", "end_date_text": null, "activities": "", "responsibility": "Vendor", "remarks": "", "status_text": "", "status": "Completed"}, {"row": 7, "no": "3", "task": "Server & software setup at HQ", "quantity": null, "group": null, "region": null, "facility": null, "days": 5, "start_date": "2026-06-22", "start_date_text": null, "end_date": "2026-06-26", "end_date_text": null, "activities": "", "responsibility": "Vendor & IT", "remarks": "", "status_text": "", "status": "Completed"}, {"row": 8, "no": "4", "task": "Staff enrolment / registration", "quantity": null, "group": null, "region": null, "facility": null, "days": 12, "start_date": "2026-06-29", "start_date_text": null, "end_date": "2026-07-10", "end_date_text": null, "activities": "", "responsibility": "HR", "remarks": "", "status_text": "", "status": "Completed"}, {"row": 24, "no": "9", "task": "System Test", "quantity": null, "group": null, "region": null, "facility": null, "days": 3, "start_date": "2026-08-26", "start_date_text": null, "end_date": "2026-08-28", "end_date_text": null, "activities": "", "responsibility": "Vendor & IT", "remarks": "", "status_text": "", "status": "Pending"}, {"row": 25, "no": "10", "task": "User Acceptance Test & Project Hand Over", "quantity": null, "group": null, "region": null, "facility": null, "days": 4, "start_date": "2026-09-01", "start_date_text": null, "end_date": "2026-09-04", "end_date_text": null, "activities": "", "responsibility": "All", "remarks": "", "status_text": "", "status": "Pending"}], "sites": [{"row": 9, "no": "5.1", "task": "North Hub Main Office", "quantity": 2, "group": "NORTH", "region": "Northern", "facility": "Main Office", "days": 1, "start_date": "2026-07-20", "start_date_text": null, "end_date": "2026-07-20", "end_date_text": null, "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "", "status_text": "", "status": "done", "flags": []}, {"row": 10, "no": "5.2", "task": "North Hub Warehouse A", "quantity": 1, "group": "NORTH", "region": "Northern", "facility": "Warehouse", "days": 1, "start_date": "2026-07-21", "start_date_text": null, "end_date": "2026-07-21", "end_date_text": null, "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "", "status_text": "", "status": "done", "flags": []}, {"row": 11, "no": "5.3", "task": "Riverside Depot", "quantity": 1, "group": "NORTH", "region": "Northern", "facility": "Depot", "days": 1, "start_date": "2026-07-22", "start_date_text": null, "end_date": "2026-07-22", "end_date_text": null, "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "Unstable network - 4G router requested", "status_text": "", "status": "done", "flags": ["network"]}, {"row": 12, "no": "5.4", "task": "Hilltop Site Office", "quantity": 1, "group": "NORTH", "region": "Northern", "facility": "Site Office", "days": null, "start_date": null, "start_date_text": "On hold", "end_date": null, "end_date_text": "", "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "Site cabin not ready", "status_text": "", "status": "on_hold", "flags": []}, {"row": 13, "no": "6.1", "task": "Central Office Tower", "quantity": 3, "group": "CENTRAL", "region": "Central", "facility": "Main Office", "days": 1, "start_date": "2026-07-27", "start_date_text": null, "end_date": "2026-07-27", "end_date_text": null, "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "", "status_text": "", "status": "done", "flags": []}, {"row": 14, "no": "6.2", "task": "Central Workshop", "quantity": 1, "group": "CENTRAL", "region": "Central", "facility": "Workshop", "days": 1, "start_date": "2026-07-28", "start_date_text": null, "end_date": "2026-07-28", "end_date_text": null, "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "", "status_text": "", "status": "done", "flags": []}, {"row": 15, "no": "6.3", "task": "Central Mustering Point", "quantity": 1, "group": "CENTRAL", "region": "Central", "facility": "Mustering Point", "days": 1, "start_date": "2026-07-29", "start_date_text": null, "end_date": "2026-07-29", "end_date_text": null, "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "Additional site, not in original list", "status_text": "", "status": "done", "flags": ["scope"]}, {"row": 16, "no": "6.4", "task": "City Parking Depot", "quantity": 1, "group": "CENTRAL", "region": "Central", "facility": "Depot", "days": 1, "start_date": "2026-08-03", "start_date_text": null, "end_date": "2026-08-03", "end_date_text": null, "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "", "status_text": "", "status": "done", "flags": []}, {"row": 17, "no": "7.1", "task": "South Port Office", "quantity": 2, "group": "SOUTH", "region": "Southern", "facility": "Office", "days": 1, "start_date": "2026-08-05", "start_date_text": null, "end_date": "2026-08-05", "end_date_text": null, "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "", "status_text": "", "status": "done", "flags": []}, {"row": 18, "no": "7.2", "task": "South Landfill Gate", "quantity": 1, "group": "SOUTH", "region": "Southern", "facility": "Site Office", "days": 1, "start_date": "2026-08-06", "start_date_text": null, "end_date": "2026-08-06", "end_date_text": null, "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "No network connection", "status_text": "", "status": "done", "flags": ["network"]}, {"row": 19, "no": "7.3", "task": "Coastal Depot", "quantity": 1, "group": "SOUTH", "region": "Southern", "facility": "Depot", "days": 1, "start_date": "2026-08-18", "start_date_text": null, "end_date": "2026-08-18", "end_date_text": null, "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "", "status_text": "", "status": "upcoming", "flags": []}, {"row": 20, "no": "7.4", "task": "Harbour Mustering Point", "quantity": 1, "group": "SOUTH", "region": "Southern", "facility": "Mustering Point", "days": 1, "start_date": "2026-08-20", "start_date_text": null, "end_date": "2026-08-20", "end_date_text": null, "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "", "status_text": "", "status": "upcoming", "flags": []}, {"row": 21, "no": "8.1", "task": "Island Outpost", "quantity": 1, "group": "EAST", "region": "Eastern", "facility": "Mustering Point", "days": null, "start_date": null, "start_date_text": "TBC", "end_date": null, "end_date_text": "", "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "Ferry schedule to be confirmed", "status_text": "", "status": "pending", "flags": []}, {"row": 22, "no": "8.2", "task": "East Valley Office", "quantity": 1, "group": "EAST", "region": "Eastern", "facility": "Office", "days": 1, "start_date": "2026-08-24", "start_date_text": null, "end_date": "2026-08-24", "end_date_text": null, "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "", "status_text": "", "status": "upcoming", "flags": []}, {"row": 23, "no": "8.3", "task": "East Valley Old Depot", "quantity": 0, "group": "EAST", "region": "Eastern", "facility": "Depot", "days": null, "start_date": null, "start_date_text": "", "end_date": null, "end_date_text": "", "activities": "Install and commission unit", "responsibility": "Vendor & Client", "remarks": "KIV - unit reallocated to East Valley Office", "status_text": "", "status": "cancelled", "flags": []}], "responsibility": {"departments": ["Finance", "IT", "HR", "Operations"], "rows": [{"no": "1", "task": "Purchase order and payments", "assigned": ["Finance"]}, {"no": "2", "task": "Network / IP address provisioning", "assigned": ["IT"]}, {"no": "3", "task": "Server and database setup", "assigned": ["IT"]}, {"no": "4", "task": "Staff enrolment data", "assigned": ["HR"]}, {"no": "5", "task": "Site readiness (power, cabin, mounting)", "assigned": ["Operations"]}, {"no": "6", "task": "User acceptance sign-off", "assigned": ["HR", "Operations"]}]}, "warnings": []};
+</script>
+<script>
+(function () {
+'use strict';
+const T = CONFIG.terms, P = CONFIG.project, K = DATA.kpis;
+const STATUS = Object.fromEntries(CONFIG.statuses.map(s => [s.key, s]));
+const FLAG = Object.fromEntries((CONFIG.flags || []).map(f => [f.key, f]));
+const COMPLETE = CONFIG.statuses.filter(s => s.complete).map(s => s.key);
+const ACTION = CONFIG.statuses.filter(s => s.action).map(s => s.key);
+const EXCLUDED = CONFIG.statuses.filter(s => s.excluded).map(s => s.key);
+const OPEN = CONFIG.statuses.filter(s => !s.complete && !s.action && !s.excluded).map(s => s.key);
+const hasRaci = DATA.responsibility && DATA.responsibility.departments.length > 0;
+const actionSites = DATA.sites.filter(s => ACTION.includes(s.status));
+const flaggedCount = Object.values(K.flags || {}).reduce((a, b) => a + b, 0);
+
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const lc = s => String(s || '').toLowerCase();
+const sum = (arr, f) => arr.reduce((a, x) => a + f(x), 0);
+const groupName = code => (CONFIG.group_names || {})[code] || '';
+const tint = (hex, pct) => `color-mix(in srgb, ${hex} ${pct}%, white)`;
+
+function badge(statusKey) {
+    const s = STATUS[statusKey] || { label: statusKey, color: '#64748b' };
+    return `<span class="badge" style="color:${s.color};background:${tint(s.color, 10)};border-color:${tint(s.color, 35)}">${esc(s.label)}</span>`;
+}
+function flagBadge(key) {
+    const f = FLAG[key]; if (!f) return '';
+    return `<span class="badge mr-1 mb-0.5" style="color:${f.color};background:${tint(f.color, 10)};border-color:${tint(f.color, 35)}"><i class="${esc(f.icon)} text-[9px]"></i>${esc(f.label)}</span>`;
+}
+function fmtDate(iso, text, short) {
+    if (!iso) return text ? esc(text) : '-';
+    const [y, m, d] = iso.split('-').map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString('en-GB', short ? { day: '2-digit', month: 'short' } : { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+// ---------------------------------------------------------------- branding & terms
+document.documentElement.style.setProperty('--brand', P.brand_color || '#15803d');
+document.getElementById('brand-icon').className = P.icon || 'fa-solid fa-diagram-project';
+document.getElementById('brand-org').textContent = P.organization;
+document.getElementById('brand-subtitle').textContent = P.subtitle || '';
+document.getElementById('hdr-project').textContent = P.name;
+document.getElementById('hdr-pct').textContent = K.done_pct + '% Done';
+document.getElementById('hdr-asof').textContent = 'As of: ' + fmtDate(DATA.metadata.as_of);
+document.getElementById('sb-asof').textContent = fmtDate(DATA.metadata.as_of);
+if (P.vendor) document.getElementById('sb-vendor').textContent = P.vendor;
+else document.getElementById('sb-vendor-wrap').remove();
+document.getElementById('ft-left').innerHTML = `<span class="font-semibold text-slate-700">${esc(P.organization)}</span><span class="mx-2 text-slate-300">&bull;</span><span>${esc(P.name)}</span>`;
+document.getElementById('ft-right').textContent = `Source: ${DATA.metadata.source_file} · Generated ${DATA.metadata.generated_at}`;
+const termMap = { 't-group': T.group, 't-group-l': lc(T.group), 't-facility': T.facility, 't-facility-l': lc(T.facility),
+    't-units': T.units, 't-units-l': lc(T.units), 't-site': T.site, 't-sites-l': lc(T.sites) };
+Object.entries(termMap).forEach(([cls, txt]) => document.querySelectorAll('.' + cls).forEach(el => el.textContent = txt));
+
+// ---------------------------------------------------------------- navigation
+const PAGES = [
+    { id: 'overview', icon: 'fa-chart-pie', label: 'Executive Overview', title: 'Executive Progress Overview' },
+    { id: 'analytics', icon: 'fa-chart-column', label: `${T.group} Analytics`, title: `${T.group} & Regional Analytics` },
+    { id: 'sites', icon: 'fa-list-check', label: `${T.site} Directory`, title: `${T.site} Directory`, count: K.total_sites },
+    { id: 'schedule', icon: 'fa-calendar-days', label: 'Rollout Schedule', title: 'Rollout Schedule (Gantt)' },
+    { section: 'Governance & Action' },
+    { id: 'issues', icon: 'fa-triangle-exclamation', label: 'Action Items & Risks', title: 'Action Items & Risk Log', count: actionSites.length + flaggedCount, warn: true },
+    ...(hasRaci ? [{ id: 'raci', icon: 'fa-users-gear', label: 'Responsibility Matrix', title: 'Responsibility (RACI) Matrix' }] : []),
+];
+document.getElementById('nav').innerHTML = '<div class="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">Main Menu</div>' +
+    PAGES.map(p => p.section
+        ? `<div class="pt-4 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">${esc(p.section)}</div>`
+        : `<button onclick="navigateTo('${p.id}')" id="nav-${p.id}" class="nav-item w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50">
+             <span class="flex items-center gap-3"><i class="fa-solid ${p.icon} w-4 text-center ${p.warn ? 'text-amber-500' : ''}"></i><span>${esc(p.label)}</span></span>
+             ${p.count != null ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${p.warn ? 'bg-amber-50 text-amber-800 border border-amber-200' : 'bg-slate-100 text-slate-700'}">${p.count}</span>` : ''}
+           </button>`).join('');
+
+window.openSidebar = () => { document.getElementById('sidebar').classList.remove('-translate-x-full'); document.getElementById('sidebar-backdrop').classList.remove('hidden'); };
+window.closeSidebar = () => { document.getElementById('sidebar').classList.add('-translate-x-full'); document.getElementById('sidebar-backdrop').classList.add('hidden'); };
+window.navigateTo = function (id) {
+    document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    document.getElementById('page-' + id)?.classList.remove('hidden');
+    document.getElementById('nav-' + id)?.classList.add('active');
+    document.getElementById('page-title').textContent = (PAGES.find(p => p.id === id) || {}).title || '';
+    if (window.innerWidth < 768) closeSidebar();
+    if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// ---------------------------------------------------------------- overview
+function kpiCard({ label, value, note, color, icon, onclick, footer }) {
+    return `<div onclick="${onclick}" class="clean-card p-5 border-l-4 cursor-pointer group flex flex-col justify-between" style="border-left-color:${color}">
+        <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider" style="color:${color}">
+            <span>${esc(label)}</span>
+            <span class="w-8 h-8 rounded-lg flex items-center justify-center text-xs" style="background:${tint(color, 12)}"><i class="${icon}"></i></span>
+        </div>
+        <div class="mt-4 flex items-baseline justify-between gap-2">
+            <div class="text-3xl font-extrabold font-mono" style="color:${color}">${value}</div>
+            <span class="text-xs text-slate-500 font-semibold text-right">${note}</span>
+        </div>
+        <div class="text-[10px] text-slate-400 group-hover:text-slate-700 mt-2 font-semibold">${esc(footer)} <i class="fa-solid fa-arrow-right text-[8px]"></i></div>
+    </div>`;
+}
+function renderOverview() {
+    const bs = K.by_status;
+    const openUnits = sum(OPEN, k => bs[k].units), openSites = sum(OPEN, k => bs[k].sites);
+    const actUnits = sum(ACTION, k => bs[k].units);
+    const spareNote = K.spares ? ` (+ ${K.spares} ${esc(K.spares === 1 ? T.spare : T.spares)})` : '';
+    document.getElementById('ov-kpis').innerHTML = [
+        kpiCard({ label: `Total ${T.units}`, value: K.total_units, note: `${K.active_sites} ${esc(T.sites)}${spareNote}`, color: '#334155',
+                  icon: 'fa-solid fa-layer-group', onclick: "navigateTo('sites')", footer: `View ${T.site} Directory` }),
+        kpiCard({ label: COMPLETE.map(k => STATUS[k].label).join(' / ') || 'Completed', value: K.done_units, note: `${K.done_pct}%`,
+                  color: (STATUS[COMPLETE[0]] || {}).color || '#16a34a', icon: 'fa-solid fa-check',
+                  onclick: `navigateTo('sites');filterByStatus('${COMPLETE[0] || ''}')`, footer: `View ${K.done_sites} ${T.sites}` }),
+        kpiCard({ label: OPEN.map(k => STATUS[k].label).join(' / ') || 'Remaining', value: openUnits, note: `${openSites} ${esc(T.sites)}`,
+                  color: (STATUS[OPEN[0]] || {}).color || '#2563eb', icon: 'fa-solid fa-truck', onclick: "navigateTo('schedule')", footer: 'View Rollout Schedule' }),
+        kpiCard({ label: 'Action Required', value: actUnits,
+                  note: ACTION.map(k => `${bs[k].sites} ${esc(STATUS[k].label)}`).join(' + ') || '-',
+                  color: '#d97706', icon: 'fa-solid fa-triangle-exclamation', onclick: "navigateTo('issues')", footer: 'View Action Items & Risks' }),
+    ].join('');
+
+    // donut legend
+    const shown = CONFIG.statuses.filter(s => !s.excluded);
+    document.getElementById('ov-donut-sub').textContent = `All ${K.total_units} ${lc(T.units)} across ${K.active_sites} ${lc(T.sites)}`;
+    document.getElementById('ov-donut-legend').innerHTML = shown.map(s => `
+        <div onclick="navigateTo('sites');filterByStatus('${s.key}')" class="flex items-center justify-between p-1.5 rounded bg-slate-50 hover:bg-slate-100 cursor-pointer">
+            <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full" style="background:${s.color}"></span>${esc(s.label)}</span>
+            <span class="font-bold text-slate-900 font-mono">${bs[s.key].units}</span>
+        </div>`).join('');
+
+    // group bars
+    const groups = Object.entries(DATA.groups);
+    document.getElementById('ov-group-bars').innerHTML = groups.map(([code, g]) => {
+        const full = g.pct >= 100, name = groupName(code);
+        return `<div class="space-y-1 cursor-pointer" onclick="navigateTo('sites');filterByGroup(${esc(JSON.stringify(code))})">
+            <div class="flex items-center justify-between text-xs font-semibold gap-2">
+                <span class="text-slate-800 font-mono truncate">${esc(code)} ${name ? `<span class="text-slate-500 font-normal">(${esc(name)})</span>` : ''}</span>
+                <span class="font-mono shrink-0 ${full ? 'brand-text' : 'text-slate-700'}">${g.done_units}/${g.units} ${esc(T.units)} (${Math.round(g.pct)}%)</span>
+            </div>
+            <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200">
+                <div class="h-full ${full ? 'brand-bg' : 'bg-blue-600'}" style="width:${Math.min(g.pct, 100)}%"></div>
+            </div></div>`;
+    }).join('') || '<p class="text-xs text-slate-400">No data</p>';
+    const doneGroups = groups.filter(([, g]) => g.pct >= 100).map(([c]) => c);
+    document.getElementById('ov-group-foot').innerHTML = `<span>${doneGroups.length} of ${groups.length} ${esc(lc(T.groups))} completed</span>` +
+        (doneGroups.length ? ` <span class="font-mono font-semibold brand-text ml-2">${doneGroups.map(esc).join(', ')}</span>` : '');
+
+    // milestones
+    const ms = DATA.milestones.filter(m => m.no || m.start_date || m.end_date);
+    if (!ms.length) { document.getElementById('ov-milestones-card').remove(); return; }
+    const mColor = { 'Completed': '#16a34a', 'In Progress': '#2563eb', 'Pending': '#94a3b8' };
+    const mIcon = { 'Completed': 'fa-solid fa-check', 'In Progress': 'fa-solid fa-spinner fa-spin', 'Pending': 'fa-regular fa-circle' };
+    document.getElementById('ov-milestones-count').textContent = `${ms.filter(m => m.status === 'Completed').length} / ${ms.length} completed`;
+    document.getElementById('ov-milestones').innerHTML = ms.map(m => {
+        const c = mColor[m.status] || '#94a3b8';
+        return `<div class="p-3 rounded-xl border" style="background:${tint(c, 7)};border-color:${tint(c, 35)}">
+            <div class="flex items-start justify-between gap-2 text-xs font-bold text-slate-800 mb-1">
+                <span>${m.no ? `<span class="font-mono text-slate-400 mr-1">${esc(m.no)}</span>` : ''}${esc(m.task)}</span>
+                <i class="${mIcon[m.status] || mIcon.Pending} mt-0.5" style="color:${c}"></i>
+            </div>
+            <p class="text-[10px] text-slate-500 font-mono">${m.start_date || m.end_date ? fmtDate(m.start_date, m.start_date_text) + (m.end_date && m.end_date !== m.start_date ? ' → ' + fmtDate(m.end_date) : '') : 'Date TBC'}
+               · <span style="color:${c}" class="font-semibold">${esc(m.status)}</span>${m.responsibility ? ' · ' + esc(m.responsibility) : ''}</p>
+        </div>`;
+    }).join('');
+}
+
+// ---------------------------------------------------------------- charts
+function initCharts() {
+    if (typeof Chart === 'undefined') return;
+    Chart.defaults.color = '#475569';
+    Chart.defaults.font.family = 'Plus Jakarta Sans';
+    Chart.defaults.font.size = 11;
+    const grid = { color: '#f1f5f9' };
+    const shown = CONFIG.statuses.filter(s => !s.excluded);
+
+    new Chart(document.getElementById('ov-chart-donut'), {
+        type: 'doughnut',
+        data: { labels: shown.map(s => s.label), datasets: [{ data: shown.map(s => K.by_status[s.key].units),
+                backgroundColor: shown.map(s => s.color), borderWidth: 2, borderColor: '#fff' }] },
+        options: { responsive: true, maintainAspectRatio: false, cutout: '72%',
+            plugins: { legend: { display: false }, tooltip: { callbacks: {
+                label: c => ` ${c.label}: ${c.raw} ${T.units} (${K.total_units ? (c.raw / K.total_units * 100).toFixed(1) : 0}%)` } } } }
+    });
+
+    const gk = Object.keys(DATA.groups);
+    new Chart(document.getElementById('an-chart-group'), {
+        type: 'bar',
+        data: { labels: gk, datasets: [
+            { label: 'Completed', data: gk.map(k => DATA.groups[k].done_units), backgroundColor: P.brand_color, borderRadius: 4 },
+            { label: 'Remaining', data: gk.map(k => DATA.groups[k].units - DATA.groups[k].done_units), backgroundColor: '#93c5fd', borderRadius: 4 }] },
+        options: { responsive: true, maintainAspectRatio: false,
+            scales: { x: { stacked: true, grid }, y: { stacked: true, beginAtZero: true, grid, ticks: { precision: 0 } } } }
+    });
+
+    const cv = DATA.curve;
+    new Chart(document.getElementById('an-chart-curve'), {
+        type: 'line',
+        data: { labels: cv.map(d => fmtDate(d.date, null, true)), datasets: [
+            { label: 'Planned (cumulative)', data: cv.map(d => d.cum_planned), borderColor: '#94a3b8', borderDash: [5, 4], borderWidth: 2, pointRadius: 0, tension: .3 },
+            { label: 'Completed (cumulative)', data: cv.map(d => d.cum_done), borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,.08)', fill: true, borderWidth: 2.5, tension: .3 },
+            { type: 'bar', label: 'Completed per day', data: cv.map(d => d.done), backgroundColor: P.brand_color, borderRadius: 4, yAxisID: 'y1' }] },
+        options: { responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 10 } } },
+            scales: { x: { grid }, y: { beginAtZero: true, grid, ticks: { precision: 0 } },
+                      y1: { position: 'right', beginAtZero: true, grid: { drawOnChartArea: false }, ticks: { precision: 0 } } } }
+    });
+
+    const fk = Object.keys(DATA.facilities).sort((a, b) => DATA.facilities[b].units - DATA.facilities[a].units);
+    new Chart(document.getElementById('an-chart-facility'), {
+        type: 'bar',
+        data: { labels: fk, datasets: [{ label: T.units, data: fk.map(k => DATA.facilities[k].units), backgroundColor: '#9333ea', borderRadius: 4 }] },
+        options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true, grid, ticks: { precision: 0 } }, y: { grid: { display: false } } } }
+    });
+}
+
+// ---------------------------------------------------------------- site directory
+function renderSites(rows) {
+    const body = document.getElementById('sites-body');
+    body.innerHTML = rows.length ? rows.map(s => `
+        <tr class="hover:bg-slate-50 ${EXCLUDED.includes(s.status) ? 'opacity-60' : ''}">
+            <td class="py-2.5 px-4 text-center font-mono font-bold text-slate-400">${esc(s.no)}</td>
+            <td class="py-2.5 px-4"><div class="font-bold text-slate-900 whitespace-pre-line">${esc(s.task)}</div>
+                <div class="text-[10px] text-slate-400 font-mono">${esc(s.region || '')}</div></td>
+            <td class="py-2.5 px-3 text-center"><span class="px-2 py-0.5 rounded bg-slate-100 text-slate-800 font-mono font-bold">${esc(s.group)}</span></td>
+            <td class="py-2.5 px-3 text-slate-600">${esc(s.facility || '-')}</td>
+            <td class="py-2.5 px-3 text-center font-bold font-mono brand-text">${s.quantity}</td>
+            <td class="py-2.5 px-3 font-mono text-slate-600 whitespace-nowrap">${fmtDate(s.start_date, s.start_date_text)}</td>
+            <td class="py-2.5 px-3 text-center">${badge(s.status)}</td>
+            <td class="py-2.5 px-4">${s.flags.map(flagBadge).join('')}${s.remarks ? `<div class="text-slate-600 mt-0.5">${esc(s.remarks)}</div>` : (s.flags.length ? '' : '<span class="text-slate-300">-</span>')}</td>
+        </tr>`).join('')
+        : `<tr><td colspan="8" class="text-center py-8 text-slate-400 font-mono">No matching ${esc(lc(T.sites))}</td></tr>`;
+    document.getElementById('f-sites').textContent = rows.length;
+    document.getElementById('f-units').textContent = sum(rows.filter(s => !EXCLUDED.includes(s.status)), s => s.quantity);
+}
+function initFilters() {
+    const gs = Object.keys(DATA.groups);
+    document.getElementById('filter-group').innerHTML = `<option value="">All ${esc(T.groups)} (${gs.length})</option>` +
+        gs.map(g => `<option value="${esc(g)}">${esc(g)}${groupName(g) ? ' (' + esc(groupName(g)) + ')' : ''}</option>`).join('');
+    document.getElementById('filter-status').innerHTML = '<option value="">All Statuses</option>' +
+        CONFIG.statuses.filter(s => K.by_status[s.key].sites).map(s => `<option value="${s.key}">${esc(s.label)} (${K.by_status[s.key].sites})</option>`).join('');
+}
+window.filterSites = function () {
+    const q = lc(document.getElementById('site-search').value);
+    const g = document.getElementById('filter-group').value, st = document.getElementById('filter-status').value;
+    renderSites(DATA.sites.filter(s =>
+        (!q || [s.task, s.no, s.group, s.region, s.facility, s.remarks].some(v => lc(v).includes(q))) &&
+        (!g || s.group === g) && (!st || s.status === st)));
+};
+window.resetFilters = () => { ['site-search', 'filter-group', 'filter-status'].forEach(id => document.getElementById(id).value = ''); filterSites(); };
+window.filterByStatus = st => { resetFilters(); document.getElementById('filter-status').value = st; filterSites(); };
+window.filterByGroup = g => { resetFilters(); document.getElementById('filter-group').value = g; filterSites(); };
+
+// ---------------------------------------------------------------- gantt
+function renderGantt() {
+    const dated = DATA.sites.filter(s => s.start_date && !EXCLUDED.includes(s.status));
+    const el = document.getElementById('gantt');
+    if (!dated.length) { el.innerHTML = '<p class="p-6 text-slate-400 font-mono">No dated items to plot.</p>'; return; }
+    const toD = iso => { const [y, m, d] = iso.split('-').map(Number); return new Date(y, m - 1, d); };
+    const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    let min = toD(dated.reduce((a, s) => s.start_date < a ? s.start_date : a, dated[0].start_date));
+    let max = toD(dated.reduce((a, s) => (s.end_date || s.start_date) > a ? (s.end_date || s.start_date) : a, dated[0].start_date));
+    const spanDays = Math.round((max - min) / 864e5) + 1;
+    const weekly = spanDays > 75;
+    if (weekly) { min.setDate(min.getDate() - ((min.getDay() + 6) % 7)); }   // align to Monday
+    const step = weekly ? 7 : 1, cols = [];
+    for (let d = new Date(min); d <= max; d.setDate(d.getDate() + step)) {
+        const end = new Date(d); end.setDate(end.getDate() + step - 1);
+        cols.push({ start: iso(d), end: iso(end), weekend: !weekly && (d.getDay() === 0 || d.getDay() === 6),
+                    top: weekly ? 'W' + fmtDate(iso(d), null, true).split(' ')[0] : String(d.getDate()).padStart(2, '0'),
+                    bottom: d.toLocaleDateString('en-GB', { month: 'short' }) });
+    }
+    document.getElementById('gantt-range').textContent = `(${fmtDate(iso(min))} – ${fmtDate(iso(max))})`;
+    document.getElementById('gantt-sub').textContent = weekly ? 'Weekly view (each column = week starting Monday)' : 'Daily view';
+    document.getElementById('gantt-legend').innerHTML = CONFIG.statuses.filter(s => !s.excluded).map(s =>
+        `<span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm" style="background:${s.color}"></span>${esc(s.label)}</span>`).join('') +
+        (weekly ? '' : '<span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-slate-200"></span>Weekend</span>');
+    const tpl = `grid-template-columns: 260px repeat(${cols.length}, 34px)`;
+    let html = `<div class="grid bg-slate-100 text-slate-700 font-mono text-[10px] font-bold border-b border-slate-200" style="${tpl}">
+        <div class="p-2 border-r border-slate-200 sticky left-0 bg-slate-100 z-10">${esc(T.site)}</div>
+        ${cols.map(c => `<div class="p-1 text-center border-r border-slate-200"><div>${c.top}</div><div class="text-[8px] text-slate-400">${c.bottom}</div></div>`).join('')}</div>`;
+    dated.sort((a, b) => a.start_date.localeCompare(b.start_date)).forEach(s => {
+        const st = STATUS[s.status] || { color: '#64748b', icon: '' }, e = s.end_date || s.start_date;
+        html += `<div class="grid border-b border-slate-100 text-[10px] hover:bg-slate-50 items-center" style="${tpl}">
+            <div class="p-1.5 border-r border-slate-200 flex items-center justify-between gap-1 overflow-hidden bg-white sticky left-0 z-10">
+                <span class="truncate font-semibold text-slate-800" title="${esc(s.task)}"><span class="text-blue-600 font-mono">${esc(s.no)}</span> ${esc(s.task)}</span>
+                <span class="px-1 text-[9px] font-mono rounded bg-slate-100 text-slate-500 shrink-0">${esc(s.group)}</span>
+            </div>
+            ${cols.map(c => {
+                const on = s.start_date <= c.end && e >= c.start;
+                return `<div class="h-8 border-r border-slate-100 p-0.5 flex items-center justify-center ${c.weekend ? 'bg-slate-100/60' : ''}">${on
+                    ? `<div class="w-full h-4 rounded flex items-center justify-center text-white text-[9px]" style="background:${st.color}" title="${esc(st.label)}"><i class="${esc(st.icon || '')}"></i></div>` : ''}</div>`;
+            }).join('')}</div>`;
+    });
+    el.innerHTML = html;
+}
+
+// ---------------------------------------------------------------- issues
+function siteLine(s) {
+    return `<div class="p-3 rounded-xl bg-white border border-slate-200 space-y-1">
+        <div class="flex items-start justify-between gap-2 font-bold text-slate-900">
+            <span>No ${esc(s.no)}: ${esc(s.task)} <span class="text-slate-400 font-mono font-semibold">(${esc(s.group)})</span></span>${badge(s.status)}
+        </div>
+        <p class="text-[11px] text-slate-500 font-mono">${s.quantity} ${esc(s.quantity === 1 ? T.unit : T.units)}${s.facility ? ' · ' + esc(s.facility) : ''} · ${fmtDate(s.start_date, s.start_date_text)}</p>
+        ${s.remarks ? `<p class="text-slate-600">Remarks: <strong>${esc(s.remarks)}</strong></p>` : ''}
+    </div>`;
+}
+function issueCard(title, sub, color, icon, sites, wide) {
+    return `<div class="clean-card p-5 border-l-4 ${wide ? 'md:col-span-2' : ''}" style="border-left-color:${color}">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center text-sm" style="background:${tint(color, 14)};color:${color}"><i class="${esc(icon)}"></i></div>
+            <div><h4 class="text-xs font-bold uppercase tracking-wider text-slate-900">${esc(title)} (${sites.length})</h4>
+                 <p class="text-[11px] text-slate-500">${esc(sub)}</p></div>
+        </div>
+        <div class="grid grid-cols-1 ${wide ? 'sm:grid-cols-2' : ''} gap-2 text-xs">${sites.map(siteLine).join('')}</div>
+    </div>`;
+}
+function renderIssues() {
+    const cards = [];
+    ACTION.forEach(k => {
+        const list = DATA.sites.filter(s => s.status === k);
+        if (list.length) cards.push(issueCard(STATUS[k].label, STATUS[k].description || '', STATUS[k].color, STATUS[k].icon, list, false));
+    });
+    (CONFIG.flags || []).forEach(f => {
+        const list = DATA.sites.filter(s => s.flags.includes(f.key));
+        if (list.length) cards.push(issueCard(f.label, f.description || `${T.sites} flagged from remarks`, f.color, f.icon, list, true));
+    });
+    document.getElementById('issues-grid').innerHTML = cards.join('') ||
+        `<div class="clean-card p-8 text-center text-slate-500 md:col-span-2"><i class="fa-solid fa-circle-check brand-text text-2xl mb-2"></i><p>No open action items or risks.</p></div>`;
+}
+
+// ---------------------------------------------------------------- RACI
+function renderRaci() {
+    if (!hasRaci) return;
+    const R = DATA.responsibility;
+    document.getElementById('raci-sub').textContent = `${R.rows.length} duties mapped across ${R.departments.length} departments`;
+    document.getElementById('raci-head').innerHTML = `<tr><th class="py-3 px-4 w-12 text-center">No</th><th class="py-3 px-4 min-w-[300px]">Responsibility</th>` +
+        R.departments.map(d => `<th class="py-3 px-4 text-center">${esc(d)}</th>`).join('') + '</tr>';
+    const check = '<span class="w-5 h-5 rounded-full flex items-center justify-center mx-auto text-[10px] text-white brand-bg"><i class="fa-solid fa-check"></i></span>';
+    document.getElementById('raci-body').innerHTML = R.rows.map(r => `<tr class="hover:bg-slate-50">
+        <td class="py-2.5 px-4 text-center font-mono font-bold text-slate-400">${esc(r.no)}</td>
+        <td class="py-2.5 px-4 text-slate-900 font-semibold">${esc(r.task)}</td>
+        ${R.departments.map(d => `<td class="py-2.5 px-4 text-center">${r.assigned.includes(d) ? check : '<span class="text-slate-300">-</span>'}</td>`).join('')}
+    </tr>`).join('');
+}
+
+// ---------------------------------------------------------------- CSV
+window.exportToCSV = function () {
+    const q = v => `"${String(v ?? '').replace(/"/g, '""').replace(/\r?\n/g, ' ')}"`;
+    const rows = [['No', T.site, T.group, 'Region', T.facility, 'Quantity', 'Start Date', 'End Date', 'Status', 'Flags', 'Remarks']];
+    DATA.sites.forEach(s => rows.push([s.no, s.task, s.group, s.region, s.facility, s.quantity, s.start_date || s.start_date_text,
+        s.end_date || s.end_date_text, (STATUS[s.status] || {}).label || s.status, s.flags.map(k => (FLAG[k] || {}).label).join('; '), s.remarks]));
+    const blob = new Blob(['﻿' + rows.map(r => r.map(q).join(',')).join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${(CONFIG.output && CONFIG.output.csv_prefix) || 'Project_Rollout'}_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+};
+
+// ---------------------------------------------------------------- init
+document.addEventListener('DOMContentLoaded', () => {
+    renderOverview();
+    initFilters();
+    renderSites(DATA.sites);
+    renderGantt();
+    renderIssues();
+    renderRaci();
+    initCharts();
+    const start = location.hash.slice(1);
+    navigateTo(PAGES.some(p => p.id === start) ? start : 'overview');
+});
+})();
+</script>
+</body>
+</html>

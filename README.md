@@ -46,3 +46,11 @@ Open [`index.html`](index.html) or visit the **GitHub Pages URL** to access the 
 ├── Project Time Line Face Reader 20_07_2026 (1).xlsx # Master Excel Workbook
 └── README.md                                         # Project Documentation
 ```
+
+---
+
+## ♻️ Reusable Template for Other Projects
+A generic, config-driven version of this dashboard lives in [`project-tracker-template/`](project-tracker-template/).
+It doesn't hard-code any Alam Flora details. Branding, wording, Excel columns, status rules and risk flags are all set in
+`config.json`, so you can copy that folder into a new repository for any other rollout project.
+See [`project-tracker-template/README.md`](project-tracker-template/README.md).
