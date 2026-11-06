@@ -1,7 +1,6 @@
-# Alam Flora Sdn Bhd - Ubio Face Reader Project Portal
+# Ubio Face Reader Project Portal
 
 > **Executive Rollout Tracker for Ubio Face Reader (Ubio X Face & Face Pro) Time Attendance Implementation**  
-> **Vendor Partner:** Third Millennium Solutions Sdn Bhd  
 > **Revision Date:** 21 August 2026
 
 ---
