@@ -1,5 +1,5 @@
 """
-Alam Flora Ubio Face Reader Project Progress Dashboard
+Ubio Face Reader Project Progress Dashboard
 Automated Pipeline & Local Viewer Server
 """
 
@@ -58,7 +58,7 @@ def serve():
 
     url = f"http://localhost:{current_port}/{DASHBOARD_HTML}"
     print(f"\n========================================================")
-    print(f"🚀 Alam Flora Corporate Dashboard is LIVE at:")
+    print(f"🚀 Project Dashboard is LIVE at:")
     print(f"   {url}")
     print(f"========================================================\n")
     

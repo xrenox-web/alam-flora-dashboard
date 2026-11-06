@@ -6,7 +6,7 @@ import os
 TEMPLATE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "dashboard_template.html")
 
 # Only these config sections are needed by the browser.
-_PUBLIC_CONFIG_KEYS = ("project", "terms", "statuses", "flags", "group_names", "output")
+_PUBLIC_CONFIG_KEYS = ("project", "terms", "statuses", "flags", "group_names")
 
 
 def _safe_json(obj):
@@ -19,6 +19,8 @@ def render_dashboard(cfg, data, output_path):
         template = f.read()
 
     public_cfg = {k: cfg[k] for k in _PUBLIC_CONFIG_KEYS if k in cfg}
+    # Only the CSV prefix is needed client-side; never expose local folder paths.
+    public_cfg["output"] = {"csv_prefix": cfg["output"].get("csv_prefix", "Project_Rollout")}
     page_title = f"{cfg['project']['organization']} - {cfg['project']['name']}"
     html = (template
             .replace("__PAGE_TITLE__", _html_escape(page_title))

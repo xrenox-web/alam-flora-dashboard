@@ -13,7 +13,7 @@ def generate_html_dashboard(data_json_path, output_html_path):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alam Flora - Ubio Face Reader Project Portal</title>
+    <title>Ubio Face Reader Project Portal</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -121,7 +121,7 @@ def generate_html_dashboard(data_json_path, output_html_path):
                         <i class="fa-solid fa-id-card-clip"></i>
                     </div>
                     <div>
-                        <h1 class="text-sm font-bold text-slate-900 leading-tight">Alam Flora</h1>
+                        <h1 class="text-sm font-bold text-slate-900 leading-tight">Project Portal</h1>
                         <p class="text-[11px] text-emerald-700 font-semibold tracking-wide uppercase">Face Reader Rollout</p>
                     </div>
                 </div>
@@ -183,7 +183,7 @@ def generate_html_dashboard(data_json_path, output_html_path):
                 </div>
                 <div class="flex flex-col gap-0.5 text-slate-500 text-[11px]">
                     <span>Vendor Partner:</span>
-                    <span class="font-bold text-slate-800 font-mono text-[11px] leading-tight">Third Millennium Solutions Sdn Bhd</span>
+                    <span class="font-bold text-slate-800 font-mono text-[11px] leading-tight">Implementation Vendor</span>
                 </div>
                 <div class="pt-2 border-t border-slate-200 flex items-center gap-2">
                     <button onclick="exportToCSV()" class="flex-1 py-1.5 px-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1.5 transition shadow-2xs">
@@ -632,7 +632,7 @@ def generate_html_dashboard(data_json_path, output_html_path):
                                     <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 font-mono text-[10px]">Pending</span>
                                 </div>
                                 <p class="text-slate-600 font-medium">Remarks: <strong class="text-purple-700">Stand Quotation Request</strong></p>
-                                <p class="text-[11px] text-slate-500 font-mono">1 Reader. Third Millennium Solutions to provide quotation for mounting stand.</p>
+                                <p class="text-[11px] text-slate-500 font-mono">1 Reader. Vendor to provide quotation for mounting stand.</p>
                             </div>
 
                             <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
@@ -752,12 +752,12 @@ def generate_html_dashboard(data_json_path, output_html_path):
         <!-- Footer -->
         <footer class="mt-auto border-t border-slate-200 bg-white py-3.5 px-6 text-center text-xs text-slate-500 font-mono flex flex-wrap items-center justify-between gap-2">
             <div>
-                <span class="font-semibold text-slate-700">Alam Flora Sdn Bhd</span>
+                <span class="font-semibold text-slate-700">Project Portal</span>
                 <span class="mx-2 text-slate-300">•</span>
                 <span>Ubio Face Reader Rollout System</span>
             </div>
             <div>
-                <span>Third Millennium Solutions Sdn Bhd & Alam Flora Implementation Team</span>
+                <span>Vendor &amp; Client Implementation Team</span>
             </div>
         </footer>
 
@@ -1171,7 +1171,7 @@ def generate_html_dashboard(data_json_path, output_html_path):
             const blob = new Blob([csv], {{ type: 'text/csv;charset=utf-8;' }});
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `Alam_Flora_Face_Reader_Rollout_${{new Date().toISOString().slice(0,10)}}.csv`;
+            link.download = `Face_Reader_Rollout_${{new Date().toISOString().slice(0,10)}}.csv`;
             link.click();
         }}
 

@@ -1,7 +1,6 @@
-# Alam Flora Sdn Bhd - Ubio Face Reader Project Portal
+# Ubio Face Reader Project Portal
 
 > **Executive Rollout Tracker for Ubio Face Reader (Ubio X Face & Face Pro) Time Attendance Implementation**  
-> **Vendor Partner:** Third Millennium Solutions Sdn Bhd  
 > **Revision Date:** 21 August 2026
 
 ---
@@ -52,6 +51,6 @@ Open [`index.html`](index.html) or visit the **GitHub Pages URL** to access the 
 
 ## ♻️ Reusable Template for Other Projects
 A generic, config-driven version of this dashboard lives in [`project-tracker-template/`](project-tracker-template/).
-It doesn't hard-code any Alam Flora details. Branding, wording, Excel columns, status rules and risk flags are all set in
+It doesn't hard-code any client or vendor details. Branding, wording, Excel columns, status rules and risk flags are all set in
 `config.json`, so you can copy that folder into a new repository for any other rollout project.
 See [`project-tracker-template/README.md`](project-tracker-template/README.md).

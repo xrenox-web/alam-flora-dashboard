@@ -1,6 +1,6 @@
 # Project Rollout Tracker (reusable template)
 
-A config-driven version of the Alam Flora Face Reader dashboard. You can use it for **any** multi-site
+A config-driven version of the original Face Reader rollout dashboard. You can use it for **any** multi-site
 rollout or project timeline: equipment installs, CCTV, network upgrades, branch fit-outs, and so on.
 
 ```
@@ -9,7 +9,7 @@ Excel workbook  ──►  tracker/parser.py  ──►  project_data.json  ─�
                          └──────────────── config.json ─────────────────┘
 ```
 
-Everything that was hard-coded for Alam Flora now lives in `config.json`: company name, vendor, branding colour,
+Everything that was hard-coded for the original project now lives in `config.json`: company name, vendor, branding colour,
 wording ("Reader" vs "Device"), Excel column headers, status rules, risk flags and cluster names. The Python code and
 the HTML template do not need to change between projects.
 
@@ -114,7 +114,7 @@ Example: force specific sites to Pending by name:
 { "status": "pending", "any": [ {"field": "task", "contains": ["kepong", "tioman"]} ] }
 ```
 
-## Worked example: the original Alam Flora workbook
+## Worked example: the original Face Reader workbook
 
 This config reproduces the original dashboard's numbers exactly from
 `Project Time Line Face Reader 20_07_2026 (1).xlsx`: 47 sites, 44/51 readers installed, 86.3%, and every site's status
@@ -122,8 +122,8 @@ matching.
 
 ```json
 {
-  "project": { "organization": "Alam Flora", "name": "Ubio Face Reader Rollout",
-               "vendor": "Third Millennium Solutions Sdn Bhd", "as_of": "2026-08-21" },
+  "project": { "organization": "Client Organization", "name": "Ubio Face Reader Rollout",
+               "vendor": "Vendor Sdn Bhd", "as_of": "2026-08-21" },
   "terms": { "unit": "Reader", "units": "Readers" },
   "excel": { "file": "Project Time Line Face Reader 20_07_2026 (1).xlsx", "timeline_sheet": "Time Line" },
   "fill_down": ["group"],
