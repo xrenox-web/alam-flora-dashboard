@@ -1,0 +1,52 @@
+{
+  "project": {
+    "organization": "Sample Company Sdn Bhd",
+    "name": "Equipment Rollout",
+    "subtitle": "Rollout Tracker",
+    "vendor": "Sample Vendor Sdn Bhd",
+    "icon": "fa-solid fa-id-card-clip",
+    "brand_color": "#15803d",
+    "as_of": "2026-08-15"
+  },
+  "terms": {
+    "unit": "Device",
+    "units": "Devices",
+    "site": "Site",
+    "sites": "Sites",
+    "group": "Cluster",
+    "groups": "Clusters",
+    "facility": "Facility",
+    "spare": "Spare",
+    "spares": "Spares"
+  },
+  "excel": {
+    "file": "auto",
+    "input_dir": "sample",
+    "timeline_sheet": "Time Line",
+    "meta_cells": { "title": "A2", "initial_date": "G2", "revision": "J2" }
+  },
+  "statuses": [
+    { "key": "done", "label": "Installed", "color": "#16a34a", "icon": "fa-solid fa-check", "complete": true,
+      "description": "Hardware installed & operational" },
+    { "key": "upcoming", "label": "Upcoming", "color": "#2563eb", "icon": "fa-solid fa-truck",
+      "description": "Scheduled for rollout" },
+    { "key": "on_hold", "label": "On Hold", "color": "#d97706", "icon": "fa-solid fa-hand", "action": true,
+      "description": "Waiting on site readiness" },
+    { "key": "pending", "label": "Pending", "color": "#9333ea", "icon": "fa-solid fa-clock", "action": true,
+      "description": "Awaiting quotation approval or date confirmation" },
+    { "key": "cancelled", "label": "KIV (Replaced)", "color": "#64748b", "icon": "fa-solid fa-ban", "excluded": true,
+      "description": "Slot reallocated to another site" }
+  ],
+  "group_names": {
+    "NORTH": "Northern Cluster",
+    "CENTRAL": "Central / HQ",
+    "SOUTH": "Southern Ports",
+    "EAST": "East Coast & Islands"
+  },
+  "output": {
+    "dir": ".",
+    "html": "index.html",
+    "json": "project_data.json",
+    "csv_prefix": "Equipment_Rollout"
+  }
+}
