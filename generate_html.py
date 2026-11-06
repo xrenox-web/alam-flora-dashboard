@@ -282,7 +282,7 @@ def generate_html_dashboard(data_json_path, output_html_path):
                         </div>
                         <div class="mt-4 flex items-baseline justify-between">
                             <div class="text-3xl font-extrabold text-blue-700 font-mono" id="ov-upcoming-readers">3</div>
-                            <span class="text-xs text-slate-500 font-medium">Johor Port & Tg. Bin</span>
+                            <span class="text-xs text-slate-500 font-medium">Pasir Gudang & Tg. Bin</span>
                         </div>
                         <div class="text-[10px] text-blue-600 group-hover:text-blue-800 flex items-center gap-1 mt-2 font-semibold">
                             <span>View Rollout Schedule</span>
@@ -524,7 +524,7 @@ def generate_html_dashboard(data_json_path, output_html_path):
                             <option value="">All Clusters (7)</option>
                             <option value="WPKL">WPKL (Kuala Lumpur)</option>
                             <option value="WPPJ">WPPJ (Putrajaya)</option>
-                            <option value="AFES">AFES (Core / Johor)</option>
+                            <option value="CORE">CORE (Core / Johor)</option>
                             <option value="PH1">PH1 (Kuantan)</option>
                             <option value="PH2">PH2 (Pekan / Rompin / Tioman)</option>
                             <option value="PH3">PH3 (Temerloh / Bera / Maran)</option>
@@ -628,7 +628,7 @@ def generate_html_dashboard(data_json_path, output_html_path):
                         <div class="space-y-2 text-xs">
                             <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
                                 <div class="flex items-center justify-between font-bold text-slate-900">
-                                    <span>No 14.6: Medan Niaga Kepong Main Office (WPKL)</span>
+                                    <span>No 14.6: Kepong Main Office (WPKL)</span>
                                     <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 font-mono text-[10px]">Pending</span>
                                 </div>
                                 <p class="text-slate-600 font-medium">Remarks: <strong class="text-purple-700">Stand Quotation Request</strong></p>
@@ -660,14 +660,14 @@ def generate_html_dashboard(data_json_path, output_html_path):
                         <div class="space-y-2 text-xs">
                             <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
                                 <div class="flex items-center justify-between font-bold text-slate-900">
-                                    <span>No 10.1: Lorong Sekilau 28@20, Kuantan</span>
+                                    <span>No 10.1: Sekilau, Kuantan</span>
                                     <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-mono text-[10px]">On Hold</span>
                                 </div>
                                 <p class="text-slate-600">Mustering Point (1 Unit). Remark: <strong class="text-amber-800">Cabin Not Ready</strong>.</p>
                             </div>
                             <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
                                 <div class="flex items-center justify-between font-bold text-slate-900">
-                                    <span>No 10.5: Pandan Damai 2/4, Kuantan</span>
+                                    <span>No 10.5: Lubuk Puyu, Kuantan</span>
                                     <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-mono text-[10px]">On Hold</span>
                                 </div>
                                 <p class="text-slate-600">Mustering Point (1 Unit). Remark: <strong class="text-amber-800">Cabin Not Ready</strong> (New Installation).</p>
@@ -689,7 +689,7 @@ def generate_html_dashboard(data_json_path, output_html_path):
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                             <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-1 shadow-2xs">
                                 <div class="flex items-center justify-between font-bold text-slate-900">
-                                    <span>No 9.4: Belenggu Sanitary Landfill (AFES)</span>
+                                    <span>No 9.4: Landfill Site, Temerloh (CORE)</span>
                                     <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-mono text-[10px]">No Network</span>
                                 </div>
                                 <p class="text-slate-600">Offline buffer storage operational. MIS 4G router under deployment.</p>
@@ -848,7 +848,7 @@ def generate_html_dashboard(data_json_path, output_html_path):
             const areaNames = {{
                 'WPKL': 'Wilayah Persekutuan KL',
                 'WPPJ': 'Putrajaya ISWMF & Offices',
-                'AFES': 'AFES Core & Johor',
+                'CORE': 'Core & Johor',
                 'PH1': 'PH1: Kuantan Cluster',
                 'PH2': 'PH2: Pekan & Rompin',
                 'PH3': 'PH3: Temerloh & Bera',

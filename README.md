@@ -10,7 +10,7 @@ Open [`index.html`](index.html) or visit the **GitHub Pages URL** to access the 
 
 ### Features
 - 🏠 **Executive Overview:** High-level KPI pulse, overall status donut, milestone progression, and cluster completion progress bars.
-- 📊 **Cluster Analytics:** Area-by-area breakdown across 7 operational clusters (WPKL, WPPJ, AFES, PH1, PH2, PH3, PH4), rollout velocity (S-curve), and facility types.
+- 📊 **Cluster Analytics:** Area-by-area breakdown across 7 operational clusters (WPKL, WPPJ, CORE, PH1, PH2, PH3, PH4), rollout velocity (S-curve), and facility types.
 - 📍 **Site Directory:** Searchable and filterable master directory of all 47 installation sites.
 - 📅 **Rollout Schedule:** Visual daily Gantt timeline mapping deployments from July to August 2026.
 - ⚠️ **Action Items & Risks:** Detailed tracking for Cabin readiness, stand quotes, and network connectivity.

@@ -32,7 +32,7 @@
     "completion_pct": 90.6
   },
   "areas": {
-    "AFES": {
+    "CORE": {
       "total_sites": 7,
       "total_readers": 8,
       "installed_readers": 5,
@@ -392,7 +392,7 @@
     {
       "row": 18,
       "no": "7",
-      "task": "Second Meeting at Client KL Sentral",
+      "task": "Second Meeting at Client HQ",
       "quantity": 1,
       "area": null,
       "region": null,
@@ -564,9 +564,9 @@
     {
       "row": 26,
       "no": "9.1",
-      "task": "Bukit Kayu Hitam Immigration, Customs, Quarantine & Security (ICQS) Complex",
+      "task": "Bukit Kayu Hitam, Kedah",
       "quantity": 1,
-      "area": "AFES",
+      "area": "CORE",
       "region": "Central",
       "location_type": "Office",
       "no_of_days": 1,
@@ -583,9 +583,9 @@
     {
       "row": 27,
       "no": "9.2",
-      "task": "Lot 5, Jalan SBC 10, Taman Batu Caves, 68100 Batu Caves, Selangor",
+      "task": "Batu Caves, Selangor",
       "quantity": 1,
-      "area": "AFES",
+      "area": "CORE",
       "region": "Central",
       "location_type": "RISE",
       "no_of_days": 1,
@@ -602,9 +602,9 @@
     {
       "row": 28,
       "no": "9.3",
-      "task": "PT 12941 & 12942, Presint 15, Wilayah Persekutuan Putrajaya \n(Alamat Pos: No. 1, Jalan P5B, Presint 5, 62200 Putrajaya)",
+      "task": "Putrajaya Site Office",
       "quantity": 1,
-      "area": "AFES",
+      "area": "CORE",
       "region": "Central",
       "location_type": "Site Office",
       "no_of_days": 1,
@@ -621,9 +621,9 @@
     {
       "row": 29,
       "no": "9.4",
-      "task": "Belenggu Sanitary Landfill\nMukim Perak, 28030 Temerloh, Pahang",
+      "task": "Landfill Site, Temerloh, Pahang",
       "quantity": 1,
-      "area": "AFES",
+      "area": "CORE",
       "region": "Central",
       "location_type": "Office & Landfill",
       "no_of_days": 1,
@@ -646,9 +646,9 @@
     {
       "row": 30,
       "no": "9.5",
-      "task": "Johor Port",
+      "task": "Pasir Gudang, Johor",
       "quantity": 1,
-      "area": "AFES",
+      "area": "CORE",
       "region": "Northen",
       "location_type": "Office",
       "no_of_days": 1,
@@ -665,9 +665,9 @@
     {
       "row": 31,
       "no": "9.6",
-      "task": "Tanjung Bin,Johor:",
+      "task": "Tanjung Bin, Johor",
       "quantity": 2,
-      "area": "AFES",
+      "area": "CORE",
       "region": "Northen",
       "location_type": "Office",
       "no_of_days": 1,
@@ -684,9 +684,9 @@
     {
       "row": 32,
       "no": "9.7",
-      "task": "Lot No 81062, Mukim Batu, Kampung Batu Muda, Kuala Lumpur (Terminal 1)",
+      "task": "Batu Muda, Kuala Lumpur (Terminal 1)",
       "quantity": 1,
-      "area": "AFES",
+      "area": "CORE",
       "region": "Central",
       "location_type": "Depot",
       "no_of_days": 1,
@@ -703,7 +703,7 @@
     {
       "row": 33,
       "no": "10.1",
-      "task": "Padang Permainan Lorong Sekilau 28@20, Mukim Kuala Kuantan, Daerah Kuantan",
+      "task": "Sekilau, Kuantan, Pahang",
       "quantity": 1,
       "area": "PH1",
       "region": "Northen",
@@ -728,7 +728,7 @@
     {
       "row": 34,
       "no": "10.2",
-      "task": "Taman Gelora",
+      "task": "Taman Gelora, Kuantan, Pahang",
       "quantity": 1,
       "area": "PH1",
       "region": "Northen",
@@ -747,7 +747,7 @@
     {
       "row": 35,
       "no": "10.3",
-      "task": "Lot 542, Mukim Sungai Karang, Bukit Gempu, Kuantan, Pahang",
+      "task": "Bukit Gempu, Kuantan, Pahang",
       "quantity": 2,
       "area": "PH1",
       "region": "Northen",
@@ -766,7 +766,7 @@
     {
       "row": 36,
       "no": "10.4",
-      "task": "MP Pusat Bandar",
+      "task": "Pusat Bandar, Kuantan, Pahang",
       "quantity": 2,
       "area": "PH1",
       "region": "Northen",
@@ -785,7 +785,7 @@
     {
       "row": 37,
       "no": "10.5",
-      "task": "B JLN PANDAN DAMAI 2/4, JLN KUANTAN BY-PASS, TMN LUBUK PUYU, 26070 KUANTAN PHG",
+      "task": "Lubuk Puyu, Kuantan, Pahang",
       "quantity": 1,
       "area": "PH1",
       "region": "Northen",
@@ -810,7 +810,7 @@
     {
       "row": 38,
       "no": "10.6",
-      "task": "B 18 & B20, Tingkat 1 & 2, Jalan IM 3/10, B.I.M Point, Indera Mahkota, 25200 Kuantan, Pahang",
+      "task": "Indera Mahkota, Kuantan, Pahang",
       "quantity": 1,
       "area": "PH1",
       "region": "Northen",
@@ -829,7 +829,7 @@
     {
       "row": 39,
       "no": "11.1",
-      "task": "No G-02, 1st Floor, Bangunan UMNO Pekan, Jalan Teng Que, 26600 Pekan, Pahang",
+      "task": "Pekan Main Office, Pahang",
       "quantity": 1,
       "area": "PH2",
       "region": "Northen",
@@ -848,7 +848,7 @@
     {
       "row": 40,
       "no": "11.2",
-      "task": "No.2, Jalan Sepakat Indah Utama, Kuala Rompin,26800 Pahang",
+      "task": "Kuala Rompin, Pahang",
       "quantity": 1,
       "area": "PH2",
       "region": "Northen",
@@ -867,7 +867,7 @@
     {
       "row": 41,
       "no": "11.3",
-      "task": "Mustering Point Pekan, PEN-3 (Bangunan Sub-Station TNB)",
+      "task": "Pekan Mustering Point, Pahang",
       "quantity": 1,
       "area": "PH2",
       "region": "Northen",
@@ -886,7 +886,7 @@
     {
       "row": 42,
       "no": "11.4",
-      "task": "No-3 Jalan Makmur 7,Bandar Satelit, 26700 Muadzam Shah,Pahang Darul Makmur.",
+      "task": "Muadzam Shah, Pahang",
       "quantity": 1,
       "area": "PH2",
       "region": "Northen",
@@ -905,7 +905,7 @@
     {
       "row": 43,
       "no": "11.5",
-      "task": "Tapak Pelupusan,Pekan",
+      "task": "Disposal Site, Pekan, Pahang",
       "quantity": 1,
       "area": "PH2",
       "region": "Northen",
@@ -924,7 +924,7 @@
     {
       "row": 44,
       "no": "11.6",
-      "task": "Pulau Tioman",
+      "task": "Pulau Tioman, Pahang",
       "quantity": 1,
       "area": "PH2",
       "region": "Northen",
@@ -949,7 +949,7 @@
     {
       "row": 45,
       "no": "12.1",
-      "task": "Gerai Runcit Pasar Temerloh",
+      "task": "Temerloh Market, Pahang",
       "quantity": 1,
       "area": "PH3",
       "region": "Northen",
@@ -968,7 +968,7 @@
     {
       "row": 46,
       "no": "12.2",
-      "task": "Depoh Temerloh Fleet Cabin",
+      "task": "Temerloh Depot (Fleet Cabin), Pahang",
       "quantity": 1,
       "area": "PH3",
       "region": "Northen",
@@ -987,7 +987,7 @@
     {
       "row": 47,
       "no": "12.3",
-      "task": "Depoh Temerloh Operation Cabin",
+      "task": "Temerloh Depot (Operation Cabin), Pahang",
       "quantity": 1,
       "area": "PH3",
       "region": "Northen",
@@ -1006,7 +1006,7 @@
     {
       "row": 48,
       "no": "12.4",
-      "task": "Lot 12 & 14, Tingkat 2, Jalan Pak Sako 3, Bandar Semantan, 28000 Temerloh, Pahang",
+      "task": "Bandar Semantan, Temerloh, Pahang",
       "quantity": 1,
       "area": "PH3",
       "region": "Northen",
@@ -1025,7 +1025,7 @@
     {
       "row": 49,
       "no": "12.5",
-      "task": "Jengka 10",
+      "task": "Jengka 10, Pahang",
       "quantity": 1,
       "area": "PH3",
       "region": "Northen",
@@ -1044,7 +1044,7 @@
     {
       "row": 50,
       "no": "12.6",
-      "task": "No. 8, Jalan Merbau Indah 3, Taman Merbau Indah, 28200 Bandar Bera, Pahang",
+      "task": "Bandar Bera, Pahang",
       "quantity": 1,
       "area": "PH3",
       "region": "Northen",
@@ -1063,7 +1063,7 @@
     {
       "row": 51,
       "no": "12.7",
-      "task": "Lot 4227, Mukim Trian, Kerayong, Daerah Bera, Pahang (Taman Pine Jerantut)",
+      "task": "Kerayong, Bera, Pahang",
       "quantity": 0,
       "area": "PH3",
       "region": "Northen",
@@ -1088,7 +1088,7 @@
     {
       "row": 52,
       "no": "12.8",
-      "task": "Depoh Jerantut, Jalan Jerantut-Maran",
+      "task": "Jerantut Depot, Pahang",
       "quantity": 1,
       "area": "PH3",
       "region": "Northen",
@@ -1113,7 +1113,7 @@
     {
       "row": 53,
       "no": "12.9",
-      "task": "No. 21, Tingkat Atas, Lorong Impian 1, Taman Maran Impian, 26500, Maran, Pahang",
+      "task": "Maran, Pahang",
       "quantity": 1,
       "area": "PH3",
       "region": "Northen",
@@ -1138,7 +1138,7 @@
     {
       "row": 54,
       "no": "12.1",
-      "task": "Depoh Bera,Temerloh",
+      "task": "Bera Depot, Pahang",
       "quantity": 1,
       "area": "PH3",
       "region": "Northen",
@@ -1157,7 +1157,7 @@
     {
       "row": 55,
       "no": "13.1",
-      "task": "Jalan Chamang, 28700 Bentong, Pahang",
+      "task": "Bentong Depot, Pahang",
       "quantity": 1,
       "area": "PH4",
       "region": "Northen",
@@ -1176,7 +1176,7 @@
     {
       "row": 56,
       "no": "13.2",
-      "task": "Office Raub",
+      "task": "Raub Office, Pahang",
       "quantity": 1,
       "area": "PH4",
       "region": "Northen",
@@ -1195,7 +1195,7 @@
     {
       "row": 57,
       "no": "13.3",
-      "task": "Lot 10662, Seksyen 12, Tempat Tempoyang, Bandar Kuala Lipis, Pahang",
+      "task": "Kuala Lipis Depot, Pahang",
       "quantity": 1,
       "area": "PH4",
       "region": "Northen",
@@ -1214,7 +1214,7 @@
     {
       "row": 58,
       "no": "13.4",
-      "task": "Kuala Lipis",
+      "task": "Kuala Lipis Site Office, Pahang",
       "quantity": 1,
       "area": "PH4",
       "region": "Northen",
@@ -1233,7 +1233,7 @@
     {
       "row": 59,
       "no": "13.5",
-      "task": "Tingkat 1, Bangunan Tabung Haji, Jalan Ah Peng, 28700 Bentong, Pahang",
+      "task": "Bentong Office, Pahang",
       "quantity": 1,
       "area": "PH4",
       "region": "Northen",
@@ -1252,7 +1252,7 @@
     {
       "row": 60,
       "no": "13.6",
-      "task": "Depoh Raub",
+      "task": "Raub Depot, Pahang",
       "quantity": 1,
       "area": "PH4",
       "region": "Northen",
@@ -1277,7 +1277,7 @@
     {
       "row": 61,
       "no": "13.7",
-      "task": "Depoh Daerah Cameron Highlands, Pahang",
+      "task": "Cameron Highlands Depot, Pahang",
       "quantity": 1,
       "area": "PH4",
       "region": "Northen",
@@ -1302,7 +1302,7 @@
     {
       "row": 62,
       "no": "13.8",
-      "task": "HS(D) 2272, PT 984, Bandar Tanah Rata, Daerah Cameron Highlands, Pahang",
+      "task": "Tanah Rata, Cameron Highlands, Pahang",
       "quantity": 1,
       "area": "PH4",
       "region": "Northen",
@@ -1321,7 +1321,7 @@
     {
       "row": 63,
       "no": "14.1",
-      "task": "Lot No 81062, Mukim Batu, Kampung Batu Muda, Kuala Lumpur",
+      "task": "Batu Muda, Kuala Lumpur",
       "quantity": 2,
       "area": "WPKL",
       "region": "Central",
@@ -1340,7 +1340,7 @@
     {
       "row": 64,
       "no": "14.2",
-      "task": "Lot 40326, Mukim of Sungai Buluh, District of Petaling, Selangor Darul Ehsan\nAddress : No. 2, Jalan Utarid U5/18A, Bandar Pinggiran Subang, Seksyen U5, 40150 Shah Alam, Selangor Darul Ehsan",
+      "task": "Shah Alam, Selangor",
       "quantity": 1,
       "area": "WPKL",
       "region": "Central",
@@ -1359,7 +1359,7 @@
     {
       "row": 65,
       "no": "14.3",
-      "task": "Mustering Point Jln Yew 1",
+      "task": "Pudu Mustering Point 1, Kuala Lumpur",
       "quantity": 1,
       "area": "WPKL",
       "region": "Central",
@@ -1378,7 +1378,7 @@
     {
       "row": 66,
       "no": "14.4",
-      "task": "Lot 1009, Seksyen 41, Bandar Kuala Lumpur (Jalan Tiong Nam)",
+      "task": "Kuala Lumpur City (Seksyen 41)",
       "quantity": 2,
       "area": "WPKL",
       "region": "Central",
@@ -1397,7 +1397,7 @@
     {
       "row": 67,
       "no": "14.5",
-      "task": "Lot 110, Seksyen 69, Daerah Kuala Lumpur (Jalan San Peng, Pudu, 55200 Kuala Lumpur)",
+      "task": "Pudu Mustering Point 2, Kuala Lumpur",
       "quantity": 1,
       "area": "WPKL",
       "region": "Central",
@@ -1416,7 +1416,7 @@
     {
       "row": 68,
       "no": "14.6",
-      "task": "No. 26, Jalan Udang Harimau 2, Medan Niaga Kepong, 51200, Kuala Lumpur",
+      "task": "Kepong Main Office, Kuala Lumpur",
       "quantity": 1,
       "area": "WPKL",
       "region": "Central",
@@ -1441,7 +1441,7 @@
     {
       "row": 69,
       "no": "14.7",
-      "task": "Lot 2880, Seksyen 41, Jalan Dewan Sultan Sulaiman/ Kampung Periuk, Kampung Baru, Kuala Lumpur",
+      "task": "Kampung Baru, Kuala Lumpur",
       "quantity": 1,
       "area": "WPKL",
       "region": "Central",
@@ -1460,7 +1460,7 @@
     {
       "row": 70,
       "no": "14.8",
-      "task": "Lot 76, Seksyen 40, Jalan Bunus 5/Masjid India, KL",
+      "task": "Masjid India, Kuala Lumpur",
       "quantity": 1,
       "area": "WPKL",
       "region": "Central",
@@ -1479,7 +1479,7 @@
     {
       "row": 71,
       "no": "15.1",
-      "task": "PT 12941 & 12942, Presint 5, Wialayah Persekutuan Putrajaya",
+      "task": "Putrajaya Depot",
       "quantity": 1,
       "area": "WPPJ",
       "region": "Central",
@@ -1498,7 +1498,7 @@
     {
       "row": 72,
       "no": "15.2",
-      "task": "No. 51A, 51B & 51C, Jalan Diplomatik, Presint 15, 62050 Putrajaya",
+      "task": "Putrajaya Main Office",
       "quantity": 1,
       "area": "WPPJ",
       "region": "Central",
